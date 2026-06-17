@@ -1,122 +1,174 @@
 # HACD Incubator AI Issuance Skill
 
-An AI-assisted issuance workflow for HACD Labs Incubator Cohort 2.
+> **Bitcoin proved PoW for money. HACD brings PoW to assets.**
 
-Apply to the incubator: https://hacd.it/incubator
-Launchpad: https://hacd.it/launchpad
+An AI-assisted issuance workflow for the HACD Labs Incubator Cohort 2 campaign.  
+Turn a raw project idea into a complete, validated HACD Stack Token launch package — in one AI session, no coding required.
 
-This Skill helps applicants and HACD Labs operators turn a raw project idea into a complete HACD Stack issuance package in one AI session — no coding required.
+**Apply:** https://hacd.it/incubator  
+**Launchpad:** https://hacd.it/launchpad  
+**Campaign rules + $500 reward pool:** see `CAMPAIGN.md`
 
-- project fit review and objective scoring
-- Stack Token design with math validation
-- HACD formation logic and participant flow
-- Launchpad page copy
-- issuer FAQ
-- X / community announcement drafts
-- internal review checklist
-- machine-readable launch spec
+---
 
-The goal is not to let AI "launch a token blindly". The goal is to make HACD issuance more structured, reviewable, repeatable, and safer for builders.
+## What this is
 
-## Incubator Cohort 2 Campaign
+This repo is an AI skill — a set of structured prompts and templates you load into Claude or ChatGPT. Once loaded, the AI becomes a HACD Stack issuance expert that knows the full Hacash ecosystem, the correct terminology, the supply math rules, and every safety check required before a project can go live on the Launchpad.
 
-HACD Labs is running a $500 reward pool campaign for the top 10 projects that complete a full Stack Token launch through this skill. See `CAMPAIGN.md` for rules, timeline, and reward split.
+It generates 8 documents per project. It validates the math. It self-reviews for unsafe claims. It scores submissions so HACD Labs can rank them objectively.
 
-## Intended users
+```
+You give it:  a project idea + 9 Google Form answers
+It gives you: 8 complete launch documents, validated and review-ready
+Time:         under 10 minutes
+```
 
-1. Project teams applying to HACD Labs Incubator Cohort 2
-2. HACD Labs reviewers preparing projects for Launchpad
-3. Community builders exploring PoW-backed Stack Assets on HACD
-4. AI agents that need a structured issuance workflow
+---
 
-## What this Skill does
+## Live example projects
 
-- Converts a project idea into a complete issuance brief
-- Helps define supply, lots, stack cost, HACD requirements, holder logic, and launch rules
-- Produces Launchpad-ready copy and FAQ
-- Produces X announcement drafts in HACD Labs style
-- Produces a `launch_spec.json` for review and validation
-- Scores submissions objectively across 5 dimensions
-- Runs a brutal pre-submission review to catch every problem before it reaches HACD Labs
-- Checks for missing fields, unsafe claims, and unclear economic logic
+Two complete working packages are included in this repo. Both pass the validator with no errors.
 
-## What this Skill does not do
+| Project | Ticker | Type | Lots | Supply | Stack Cost | Folder |
+|---------|--------|------|------|--------|------------|--------|
+| StackFire | SFR | FT | 100 | 1,000,000 | 50 HAC | `examples/example_community_token/` |
+| HacashBuilders | BUILD | FT + NFT | 500 | 10,000,000 | 50 HAC | `hacashbuilders/` |
 
-- It does not ask for private keys, seed phrases, wallet files, or passwords
-- It does not sign transactions
-- It does not guarantee launch approval
-- It does not provide legal, financial, or investment advice
-- It does not promise price appreciation, yield, or profits
+These are not mockups. Each folder contains all 8 required documents. Run the validator on either one:
+
+```bash
+python3 scripts/validate_launch_spec.py examples/example_community_token/launch_spec.json
+python3 scripts/validate_launch_spec.py hacashbuilders/launch_spec.json
+```
+
+---
+
+## Incubator Cohort 2 — $500 reward pool
+
+Campaign open: 20 June 2026  
+Campaign close: 27 June 2026  
+Winners announced: 29 June 2026
+
+Top 3 projects that launch on hacd.it/launchpad win from the prize pool:
+
+| Place | Reward |
+|-------|--------|
+| 1st | $250 |
+| 2nd | $150 |
+| 3rd | $100 |
+
+See `CAMPAIGN.md` for full rules, judging criteria, and submission format.
+
+---
+
+## Fast start — 10 minutes
+
+Full guide in `QUICKSTART.md`. Short version:
+
+**Step 1 — Load the skill**
+Open claude.ai or chatgpt.com. Paste the contents of `SKILL.md` as your first message.
+
+**Step 2 — Expand your application**
+Paste `prompts/google_form_to_intake.md` + your 9 Google Form answers. The AI expands them into a full 40-field intake form automatically.
+
+**Step 3 — Generate all 8 documents**
+Tell the AI: *"Generate all 8 documents using this intake form."*
+
+**Step 4 — Validate**
+```bash
+python3 scripts/validate_launch_spec.py your_project/launch_spec.json
+```
+
+**Step 5 — Self-review**
+Paste `prompts/roast_mode.md` + all 8 documents. Fix every issue it finds.
+
+**Step 6 — Submit**
+Send your complete package to HACD Labs via hacd.it/incubator.
+
+---
+
+## Use with Claude Code (ccr)
+
+If you have Claude Code Router installed:
+
+```bash
+ccr start
+ccr code "Load the system prompt from prompts/acp_agent_system_prompt.md and help me design a Stack Token for [your project name] with [N] lots"
+```
+
+The ACP agent system prompt at `prompts/acp_agent_system_prompt.md` contains full Hacash ecosystem knowledge including live reference data from Carat Protocol, HAC market links, wallet and explorer links, and real stack cost benchmarks.
+
+---
+
+## Prompts reference — 12 prompts total
+
+| Prompt | What it does |
+|--------|-------------|
+| `acp_agent_system_prompt.md` | Full ACP / Claude Code agent system prompt with live Hacash ecosystem knowledge |
+| `google_form_to_intake.md` | Expands 9 Google Form answers into the full 40-field intake form |
+| `project_scorer.md` | Scores any submission 1–10 across 5 weighted dimensions |
+| `roast_mode.md` | Brutal pre-submission review — finds every blocker and warning |
+| `x_thread_generator.md` | Generates 7-tweet launch thread + teaser + one-liner + 3 hooks |
+| `hac_cost_calculator.md` | Participation cost table at every lot level + FAQ additions |
+| `issuer_intake.md` | Guided intake conversation for initial project capture |
+| `project_fit_review.md` | Standalone incubator fit review |
+| `stack_token_design.md` | Standalone Stack Token design and supply math |
+| `risk_review.md` | Standalone copy safety and risk disclosure review |
+| `launchpad_page_copy.md` | Standalone Launchpad page copy generator |
+| `x_announcement.md` | Standalone X announcement drafts |
+
+---
 
 ## Repo structure
 
 ```txt
 hacd-incubator-ai-issuance-skill/
 ├── README.md
-├── CAMPAIGN.md
-├── QUICKSTART.md
-├── SKILL.md
-├── prompts/
-│   ├── google_form_to_intake.md
-│   ├── project_scorer.md
-│   ├── roast_mode.md
-│   ├── x_thread_generator.md
-│   ├── hac_cost_calculator.md
-│   ├── issuer_intake.md
-│   ├── launchpad_page_copy.md
-│   ├── project_fit_review.md
-│   ├── risk_review.md
-│   ├── stack_token_design.md
-│   └── x_announcement.md
-├── templates/
+├── CAMPAIGN.md              ← campaign rules, reward pool, timeline
+├── QUICKSTART.md            ← 10-minute builder guide
+├── SKILL.md                 ← core AI operating instructions
+├── prompts/                 ← 12 prompts (see table above)
+├── templates/               ← blank document templates
 ├── examples/
-│   ├── example_community_token/
+│   ├── example_community_token/   ← StackFire (SFR) — FT reference
 │   └── example_stack_spec.json
+├── hacashbuilders/          ← HacashBuilders (BUILD) — FT+NFT reference
 ├── scripts/
+│   └── validate_launch_spec.py
 └── .github/
 ```
 
-## Fast start (10 minutes)
+---
 
-See `QUICKSTART.md` for the full step-by-step guide. Short version:
+## Hacash ecosystem links
 
-1. Open Claude (claude.ai) or ChatGPT (chatgpt.com)
-2. Load `SKILL.md` as the AI's operating instruction
-3. Use `prompts/google_form_to_intake.md` to expand your application answers into a full intake form
-4. Ask the AI to generate all 8 documents
-5. Run the validator:
+| Resource | Link |
+|----------|------|
+| Launchpad | hacd.it/launchpad |
+| Incubator | hacd.it/incubator |
+| Wallet | wallet.hacash.org |
+| Explorer | explorer.hacash.org |
+| Buy HACD | hacash.org/get |
+| Mine HACD | hacash.org/mining-HACD |
+| HACD Marketplace | sea.hacash.diamonds |
+| HAC on CoinEx | coinex.com/en/info/HAC |
+| White Paper | hacd.it/hacash_diamond.pdf |
+| Lite Paper | hacd.it/bring_pow_to_everything.pdf |
+| HACD Labs Twitter | x.com/hacdlabs |
+| HACD Labs Discord | discord.gg/PZEEm6Jtgd |
+| Community forum | hacashtalk.com |
 
-```bash
-python3 scripts/validate_launch_spec.py path/to/your/launch_spec.json
-```
+---
 
-6. Run `prompts/roast_mode.md` to catch every problem before submitting
-7. Submit your package to HACD Labs
+## What the Skill does not do
 
-## Prompts reference
+- Does not ask for private keys, seed phrases, or wallet passwords
+- Does not sign transactions
+- Does not guarantee Launchpad approval
+- Does not provide legal, financial, or investment advice
+- Does not promise price appreciation, yield, or profits
 
-| Prompt | What it does |
-|--------|-------------|
-| `google_form_to_intake.md` | Expands 9 Google Form answers into the full 40-field intake form |
-| `project_scorer.md` | Scores any submission 1-10 across 5 dimensions objectively |
-| `roast_mode.md` | Brutal pre-submission review — finds every blocker and warning |
-| `x_thread_generator.md` | Generates full X launch thread + 5 hooks from launch_spec.json |
-| `hac_cost_calculator.md` | Shows participants exactly what they need at every lot level |
-| `issuer_intake.md` | Guides the initial intake conversation |
-| `project_fit_review.md` | Standalone fit review prompt |
-| `stack_token_design.md` | Standalone stack design prompt |
-| `risk_review.md` | Standalone risk and copy safety review |
-| `launchpad_page_copy.md` | Standalone launchpad copy prompt |
-| `x_announcement.md` | Standalone announcement prompt |
-
-## Reference example
-
-See `examples/example_community_token/` for a complete valid submission using the StackFire (SFR) community token test project. This is exactly what a strong submission looks like — 8 documents, passing validator, complete review checklist.
-
-## Recommended public positioning
-
-> HACD Labs Incubator Cohort 2 uses AI to simplify PoW-backed asset issuance on HACD.
-> Builders can turn an idea into a structured Stack launch proposal in 10 minutes, while HACD Labs keeps human review over formation logic, launch quality, and ecosystem fit.
+---
 
 ## License
 
