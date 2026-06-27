@@ -1,3 +1,11 @@
+<p align="center">
+  <img src="./assets/stacklearn-logo.png" alt="StackLearn Logo" width="180">
+</p>
+
+<p align="center">
+  <strong>Learn • Build • Earn in Web3</strong>
+</p>
+
 # StackLearn
 
 ## Overview
